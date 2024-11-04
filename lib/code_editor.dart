@@ -2,14 +2,13 @@ library code_editor;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'ToolButton.dart';
 import 'formatters/html.dart';
 
 part 'EditorModel.dart';
-part 'FileEditor.dart';
 part 'EditorModelStyleOptions.dart';
+part 'FileEditor.dart';
 part 'Theme.dart';
 
 class CodeEditor extends StatefulWidget {
@@ -238,7 +237,9 @@ class _CodeEditorState extends State<CodeEditor> {
         letterSpacing: 1.0,
         fontWeight: FontWeight.normal,
         fontSize: widget.model.styleOptions.fontSizeOfFilename,
-        color: isSelected ? widget.model.styleOptions.editorFilenameColor : widget.model.styleOptions.editorFilenameColor.withOpacity(0.5),
+        color: isSelected
+            ? widget.model.styleOptions.editorFilenameColor
+            : widget.model.styleOptions.editorFilenameColor.withOpacity(0.5),
       ),
     );
   }
@@ -331,10 +332,10 @@ class _CodeEditorState extends State<CodeEditor> {
           elevation: 0.0,
           backgroundColor: Colors.white.withOpacity(0),
         ),
-        child: FaIcon(
-          FontAwesomeIcons.arrowRotateLeft,
-          color: Colors.white.withOpacity(0.5),
+        child: Icon(
+          Icons.undo,
           size: 18,
+          color: Colors.white.withOpacity(0.5),
         ),
         onPressed: () {
           undo();
@@ -345,10 +346,10 @@ class _CodeEditorState extends State<CodeEditor> {
           elevation: 0.0,
           backgroundColor: Colors.white.withOpacity(0),
         ),
-        child: FaIcon(
-          FontAwesomeIcons.arrowRotateRight,
-          color: Colors.white.withOpacity(0.5),
+        child: Icon(
+          Icons.redo,
           size: 18,
+          color: Colors.white.withOpacity(0.5),
         ),
         onPressed: () {
           redo();
@@ -381,7 +382,9 @@ class _CodeEditorState extends State<CodeEditor> {
     return Positioned(
       bottom: opt.editButtonPosBottom,
       right: opt.editButtonPosRight,
-      top: (widget.model.isEditing && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50) ? 50 : opt.editButtonPosTop,
+      top: (widget.model.isEditing && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50)
+          ? 50
+          : opt.editButtonPosTop,
       left: opt.editButtonPosLeft,
       child: Row(
         children: opt.reverseEditAndUndoRedoButtons ? buttons.reversed.toList() : buttons,
@@ -432,19 +435,19 @@ class _CodeEditorState extends State<CodeEditor> {
       final List<ToolButton> toolButtons = [
         ToolButton(
           press: () => insertIntoTextField("\t"),
-          icon: FontAwesomeIcons.indent,
+          icon: Icons.arrow_right_alt,
         ),
         ToolButton(
           press: () => insertIntoTextField("<"),
-          icon: FontAwesomeIcons.chevronLeft,
+          icon: Icons.chevron_left,
         ),
         ToolButton(
           press: () => insertIntoTextField(">"),
-          icon: FontAwesomeIcons.chevronRight,
+          icon: Icons.chevron_right,
         ),
         ToolButton(
           press: () => insertIntoTextField('""', diff: -1),
-          icon: FontAwesomeIcons.quoteLeft,
+          icon: Icons.format_quote,
         ),
         ToolButton(
           press: () => insertIntoTextField(":"),
@@ -468,23 +471,23 @@ class _CodeEditorState extends State<CodeEditor> {
         ),
         ToolButton(
           press: () => insertIntoTextField("-"),
-          icon: FontAwesomeIcons.minus,
+          icon: Icons.remove,
         ),
         ToolButton(
           press: () => insertIntoTextField("="),
-          icon: FontAwesomeIcons.equals,
+          symbol: '=',
         ),
         ToolButton(
           press: () => insertIntoTextField("+"),
-          icon: FontAwesomeIcons.plus,
+          symbol: '+',
         ),
         ToolButton(
           press: () => insertIntoTextField("/"),
-          icon: FontAwesomeIcons.divide,
+          symbol: '/',
         ),
         ToolButton(
           press: () => insertIntoTextField("*"),
-          icon: FontAwesomeIcons.xmark,
+          symbol: '*',
         ),
       ];
 
@@ -522,7 +525,7 @@ class _CodeEditorState extends State<CodeEditor> {
                           fontFamily: "monospace",
                         ),
                       )
-                    : FaIcon(
+                    : Icon(
                         btn.icon,
                         color: opt.editorToolButtonTextColor,
                         size: 15,
@@ -576,7 +579,8 @@ class _CodeEditorState extends State<CodeEditor> {
                     if (widget.formatters.contains(widget.model.currentLanguage)) {
                       newCode = format(newCode, widget.model.currentLanguage);
                     }
-                    editingController.text = newCode; // without it editing twice the same file in a row would display the previous content
+                    editingController.text =
+                        newCode; // without it editing twice the same file in a row would display the previous content
                     widget.model.updateCodeOfIndex(position, newCode);
                     widget.model.toggleEditing();
                     widget.onSubmit?.call(widget.model.currentLanguage, newCode);
